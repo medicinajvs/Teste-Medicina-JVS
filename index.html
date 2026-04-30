@@ -3,276 +3,648 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checklist de Teste - Flashcards IA</title>
+  <title>Checklist de Testes — Flashcards IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    :root {
+      --bg: #f8fafc;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --indigo: #4f46e5;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(79, 70, 229, 0.10), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.08), transparent 32rem),
+        var(--bg);
+      color: var(--ink);
     }
 
-    .container {
-      max-width: 980px;
-      margin: 0 auto;
+    .glass {
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
-    .hero {
-      background: linear-gradient(135deg, #4f46e5, #7c3aed, #0f172a);
-      border-radius: 24px;
-      padding: 32px;
-      margin-bottom: 24px;
+    .custom-scroll::-webkit-scrollbar { width: 7px; height: 7px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    .custom-scroll:hover::-webkit-scrollbar-thumb { background: #94a3b8; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 34px;
-    }
-
-    .progress-wrap {
-      background: rgba(255,255,255,0.2);
-      height: 14px;
-      border-radius: 999px;
-      margin-top: 20px;
-      overflow: hidden;
-    }
-
-    .progress {
-      height: 100%;
-      width: 0%;
-      background: white;
-      transition: width .3s;
-    }
-
-    .stats {
-      margin-top: 12px;
-      font-weight: bold;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      background: #111827;
-      border: 1px solid #334155;
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .card.done {
-      border-color: #10b981;
-      background: rgba(16,185,129,0.12);
-    }
-
-    .card label {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      cursor: pointer;
-    }
-
-    input[type="checkbox"] {
-      width: 22px;
-      height: 22px;
-      accent-color: #10b981;
-      margin-top: 2px;
-    }
-
-    h2 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      color: white;
-    }
-
-    p {
-      margin: 0;
-      color: #cbd5e1;
-      line-height: 1.45;
-      font-size: 14px;
-    }
-
-    .success {
-      margin-top: 10px;
-      color: #86efac;
-      font-size: 13px;
-    }
-
-    .final {
-      display: none;
-      margin-top: 24px;
-      padding: 24px;
-      border-radius: 20px;
-      background: rgba(16,185,129,0.15);
-      border: 1px solid #10b981;
-      text-align: center;
-    }
-
-    .final.show {
-      display: block;
-    }
+    .animate-in { animation: slideIn .28s ease-out both; }
   </style>
 </head>
-<body>
-  <div class="container">
-    <section class="hero">
-      <h1>Teste Final — Flashcards IA</h1>
-      <p>Complete as missões abaixo para validar se o site está funcionando corretamente.</p>
-
-      <div class="progress-wrap">
-        <div id="progress" class="progress"></div>
-      </div>
-
-      <div id="stats" class="stats">0% concluído</div>
-    </section>
-
-    <section class="grid" id="checklist">
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>1. Abrir o site</h2>
-            <p>Abra a página publicada e veja se carrega sem erro inicial.</p>
-            <div class="success">Passou se: a tela inicial aparece normalmente.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>2. Enviar vídeo</h2>
-            <p>Envie um vídeo curto, de preferência entre 30 segundos e 2 minutos.</p>
-            <div class="success">Passou se: o arquivo é aceito e o botão processar fica ativo.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>3. Processar vídeo</h2>
-            <p>Clique em iniciar processamento e aguarde.</p>
-            <div class="success">Passou se: a transcrição aparece sem erro.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>4. Flashcards</h2>
-            <p>Verifique se foram gerados flashcards com pergunta, resposta e nota.</p>
-            <div class="success">Passou se: os cards aparecem e fazem sentido.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>5. Análise de evidência</h2>
-            <p>Rode a análise de evidência da aula.</p>
-            <div class="success">Passou se: aparecem tópicos, lacunas, sugestões e fontes.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>6. Texto enriquecido</h2>
-            <p>Gere o texto enriquecido a partir da análise.</p>
-            <div class="success">Passou se: o texto aparece mais completo que a transcrição.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>7. Histórico</h2>
-            <p>Recarregue o site e abra o item salvo no histórico.</p>
-            <div class="success">Passou se: transcrição, cards e análise continuam salvos.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>8. Biblioteca</h2>
-            <p>Crie um deck e salve flashcards nele.</p>
-            <div class="success">Passou se: deck e cards aparecem na biblioteca.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>9. Sessão de estudo</h2>
-            <p>Inicie uma sessão por deck, favoritos ou vencidos.</p>
-            <div class="success">Passou se: os cards aparecem para estudo e revisão.</div>
-          </div>
-        </label>
-      </div>
-
-      <div class="card">
-        <label>
-          <input type="checkbox">
-          <div>
-            <h2>10. Celular</h2>
-            <p>Abra o site no celular ou reduza a janela do navegador.</p>
-            <div class="success">Passou se: o layout continua usável.</div>
-          </div>
-        </label>
-      </div>
-    </section>
-
-    <section id="final" class="final">
-      <h1>✅ Teste concluído</h1>
-      <p>O fluxo principal do Flashcards IA foi validado.</p>
-    </section>
-  </div>
+<body class="min-h-screen font-sans">
+  <div id="app" class="min-h-screen"></div>
 
   <script>
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const progress = document.getElementById('progress');
-    const stats = document.getElementById('stats');
-    const final = document.getElementById('final');
+    const STORAGE_KEY = 'flashcards_manual_qa_checklist_v1';
 
-    function updateProgress() {
-      const total = checkboxes.length;
-      const done = Array.from(checkboxes).filter(c => c.checked).length;
-      const percent = Math.round((done / total) * 100);
+    const defaultState = {
+      checklist: {},
+      notes: {},
+      lastUpdatedAt: null,
+    };
 
-      progress.style.width = percent + '%';
-      stats.textContent = percent + '% concluído — ' + done + ' de ' + total + ' missões';
+    const state = loadState();
 
-      checkboxes.forEach((checkbox) => {
-        checkbox.closest('.card').classList.toggle('done', checkbox.checked);
-      });
+    const manualSuites = [
+      {
+        id: 'first_access',
+        title: 'Acesso inicial e navegação',
+        icon: '🚀',
+        description: 'Confirma se o site abre bem e se o usuário entende o fluxo geral.',
+        items: [
+          'Abrir o site publicado no Vercel sem erro de tela branca.',
+          'Confirmar se a sidebar principal aparece corretamente.',
+          'Confirmar se todas as seções principais aparecem na ordem esperada.',
+          'Testar rolagem entre seções pelo menu lateral.',
+          'Confirmar se a interface está responsiva em tela menor ou mobile.',
+        ],
+      },
+      {
+        id: 'upload',
+        title: 'Upload e processamento de vídeo',
+        icon: '🎥',
+        description: 'Valida o fluxo de envio, transcrição, armazenamento e geração inicial.',
+        items: [
+          'Selecionar um vídeo principal pequeno.',
+          'Selecionar um vídeo complementar opcional.',
+          'Remover o vídeo complementar e selecionar novamente.',
+          'Iniciar processamento sem erro de rede.',
+          'Confirmar que a transcrição foi gerada.',
+          'Confirmar que o vídeo principal foi salvo e pode ser aberto depois.',
+          'Confirmar que o vídeo complementar foi usado como base de enriquecimento quando enviado.',
+          'Confirmar se flashcards foram gerados quando a opção estiver marcada.',
+          'Testar o botão Limpar tudo depois de processar.',
+        ],
+      },
+      {
+        id: 'transcription',
+        title: 'Transcrição salva',
+        icon: '📄',
+        description: 'Testa apresentação, busca, cópia e leitura da transcrição.',
+        items: [
+          'Confirmar se o layout da transcrição está no padrão visual novo.',
+          'Confirmar se o texto não mostra timestamps falsos ou incorretos.',
+          'Pesquisar um termo dentro da transcrição, se a busca estiver disponível.',
+          'Copiar a transcrição e colar em outro local para verificar o texto.',
+          'Conferir se especialidade e tópicos detectados aparecem de forma coerente.',
+          'Confirmar se o campo de texto tem rolagem quando o conteúdo for longo.',
+          'Confirmar se a coluna do texto fica alinhada com a coluna lateral.',
+        ],
+      },
+      {
+        id: 'history',
+        title: 'Histórico',
+        icon: '🗂️',
+        description: 'Confere se os itens antigos e novos ficam acessíveis para o usuário.',
+        items: [
+          'Abrir o histórico e conferir se os cards carregam.',
+          'Usar busca por termo, título ou conteúdo.',
+          'Filtrar por especialidade.',
+          'Filtrar por tema ou tag.',
+          'Alternar entre visualização em grade e lista.',
+          'Abrir prévia de um item.',
+          'Abrir item completo.',
+          'Favoritar e desfavoritar um item.',
+          'Abrir vídeo salvo a partir do histórico.',
+          'Excluir um item de teste e confirmar se ele some da lista.',
+          'Recarregar a página e verificar se o histórico permanece correto.',
+        ],
+      },
+      {
+        id: 'flashcards_generation',
+        title: 'Flashcards gerados',
+        icon: '🃏',
+        description: 'Valida os cards gerados diretamente da transcrição.',
+        items: [
+          'Carregar flashcards salvos ou gerar se faltar.',
+          'Regenerar flashcards.',
+          'Confirmar se perguntas e respostas aparecem sem markdown cru, como **texto**.',
+          'Confirmar se mnemônicos aparecem formatados corretamente.',
+          'Alternar entre grade e estudo.',
+          'Virar o flashcard no modo estudo.',
+          'Navegar entre cards com anterior/próximo.',
+          'Verificar se cards grandes têm rolagem e não quebram o layout.',
+        ],
+      },
+      {
+        id: 'evidence',
+        title: 'Análise de Evidência',
+        icon: '🧠',
+        description: 'Confere lacunas, sugestões, mnemônicos, fontes e ações de enriquecimento.',
+        items: [
+          'Gerar análise de evidência.',
+          'Reabrir um item que já tem análise e confirmar carregamento automático.',
+          'Conferir Tópicos detectados no layout sem corte lateral.',
+          'Conferir Lacunas identificadas em cards proporcionais.',
+          'Adicionar correção de lacuna ao texto enriquecido.',
+          'Confirmar efeito visual de Adicionado no botão da lacuna.',
+          'Detalhar uma sugestão de melhoria.',
+          'Confirmar que Detalhar melhoria não deixa a tela branca.',
+          'Adicionar sugestão ao texto enriquecido.',
+          'Confirmar efeito visual de Adicionado na sugestão.',
+          'Confirmar que Texto que será adicionado fica centralizado e sem negrito excessivo.',
+          'Criar flashcards dos mnemônicos.',
+          'Confirmar efeito de Flashcards criados após gerar mnemônicos.',
+          'Conferir se textos de mnemônicos não mostram markdown cru.',
+          'Abrir fontes encontradas.',
+          'Conferir vídeos de referência usados, se houver.',
+        ],
+      },
+      {
+        id: 'enriched_text',
+        title: 'Texto enriquecido',
+        icon: '✨',
+        description: 'Valida geração, edição, comparação e aprovação do texto enriquecido.',
+        items: [
+          'Gerar texto enriquecido.',
+          'Abrir aba Original.',
+          'Editar texto no editor.',
+          'Testar botões de negrito, itálico, sublinhado e tachado.',
+          'Testar título H2, parágrafo, citação, lista e destaque.',
+          'Inserir link no editor.',
+          'Limpar formatação.',
+          'Confirmar autosave após editar.',
+          'Abrir Adições aplicadas ao texto enriquecido.',
+          'Expandir Correções de Lacuna.',
+          'Expandir Sugestões Aplicadas.',
+          'Visualizar uma adição aplicada.',
+          'Editar uma adição aplicada.',
+          'Remover uma adição aplicada.',
+          'Confirmar que lacunas antigas não mostram ### Correção de lacuna.',
+          'Abrir aba Enriquecido e conferir prévia elegante.',
+          'Abrir aba Comparar e conferir padrão visual de comparação inteligente.',
+          'Testar alternância Texto Original / Enriquecido na comparação.',
+          'Testar Lado a Lado na comparação.',
+          'Passar mouse sobre destaques verdes, se houver tooltip.',
+          'Clicar em Aprovar Melhorias.',
+          'Confirmar efeito bonito de conclusão no botão Aprovar Melhorias.',
+          'Confirmar redirecionamento para Sessão exclusiva do item após aprovar.',
+          'Confirmar que Resumo do conteúdo mostra o texto aprovado/enriquecido.',
+        ],
+      },
+      {
+        id: 'library',
+        title: 'Biblioteca de Flashcards',
+        icon: '📚',
+        description: 'Testa organização por decks, pastas, temas, filtros e edição de cards.',
+        items: [
+          'Salvar flashcards atuais na biblioteca.',
+          'Criar novo deck.',
+          'Criar pasta principal.',
+          'Criar subpasta.',
+          'Criar deck dentro de subpasta.',
+          'Renomear pasta principal.',
+          'Renomear subpasta.',
+          'Mover pasta principal.',
+          'Mover subpasta.',
+          'Excluir pasta principal de teste.',
+          'Excluir subpasta de teste.',
+          'Confirmar que pasta Sem especialidade não fica presa se estiver vazia.',
+          'Visualizar flashcard.',
+          'Editar flashcard.',
+          'Buscar card na biblioteca.',
+          'Filtrar por especialidade.',
+          'Filtrar favoritos.',
+          'Filtrar vencidos.',
+          'Confirmar que os nomes não aparecem concatenados com hífen desnecessário.',
+        ],
+      },
+      {
+        id: 'study_session',
+        title: 'Sessão de Estudo',
+        icon: '📝',
+        description: 'Valida estudo, feedback visual, filtros por resposta e persistência dos dados.',
+        items: [
+          'Carregar todos os cards disponíveis.',
+          'Carregar cards por especialidade.',
+          'Carregar cards por tema.',
+          'Carregar cards por deck selecionado.',
+          'Confirmar que cards ainda não respondidos aparecem primeiro quando possível.',
+          'Responder um card como Errei.',
+          'Responder um card como Difícil.',
+          'Responder um card como Bom.',
+          'Responder um card como Fácil.',
+          'Confirmar identificação visual vermelha para Errei.',
+          'Confirmar identificação visual âmbar para Difícil.',
+          'Confirmar identificação visual azul para Bom.',
+          'Confirmar identificação visual verde para Fácil.',
+          'Filtrar por Não respondidos.',
+          'Filtrar por Errei.',
+          'Filtrar por Difícil.',
+          'Filtrar por Bom.',
+          'Filtrar por Fácil.',
+          'Confirmar se a resposta do flashcard fica centralizada.',
+          'Confirmar se respostas longas têm rolagem interna.',
+          'Confirmar se Vistos, Acertos, Difíceis e Fáceis atualizam.',
+          'Recarregar a página e confirmar que os contadores persistem.',
+        ],
+      },
+      {
+        id: 'spaced_review',
+        title: 'Revisão Inteligente',
+        icon: '🔁',
+        description: 'Confere revisão espaçada, calendário e integração com estudo.',
+        items: [
+          'Clicar em Revisar hoje.',
+          'Clicar em Novos.',
+          'Clicar em Difíceis.',
+          'Clicar em Deck selecionado.',
+          'Responder card na revisão espaçada.',
+          'Confirmar se revisão salva sem erro.',
+          'Confirmar se card revisado atualiza vencimento.',
+          'Alterar meta diária.',
+          'Navegar no calendário inteligente.',
+          'Selecionar dia no calendário.',
+          'Confirmar cards locais no dia selecionado.',
+        ],
+      },
+      {
+        id: 'google_calendar',
+        title: 'Google Calendar',
+        icon: '📅',
+        description: 'Valida conexão OAuth, sincronização e eventos de revisão.',
+        items: [
+          'Conectar Google Calendar no site publicado.',
+          'Confirmar que não aparece invalid_client.',
+          'Confirmar que não aparece redirect_uri_mismatch.',
+          'Sincronizar próximas revisões.',
+          'Atualizar eventos do mês.',
+          'Confirmar eventos do Google Calendar no calendário inteligente.',
+          'Desconectar Google Calendar.',
+          'Conectar novamente após desconectar.',
+        ],
+      },
+      {
+        id: 'exclusive_session',
+        title: 'Sessão exclusiva do item',
+        icon: '📌',
+        description: 'Valida a área que abre depois de selecionar ou aprovar um item.',
+        items: [
+          'Abrir item completo pelo histórico.',
+          'Confirmar título e metadados do item.',
+          'Confirmar Resumo do conteúdo.',
+          'Confirmar que texto enriquecido aprovado aparece no resumo quando aplicável.',
+          'Confirmar Prévia dos flashcards com rolagem.',
+          'Confirmar Ações rápidas alinhadas com Prévia dos flashcards.',
+          'Confirmar Métricas rápidas no espaço lateral.',
+          'Testar Ver vídeo.',
+          'Testar Usar salvos / gerar se faltar.',
+          'Testar Regenerar flashcards.',
+          'Testar Analisar evidência.',
+          'Testar Exportar estudo.',
+          'Testar Favoritar / desfavoritar.',
+          'Testar Excluir item em item de teste.',
+        ],
+      },
+      {
+        id: 'deploy',
+        title: 'Deploy e produção',
+        icon: '🚢',
+        description: 'Checklist final depois de enviar atualizações para GitHub, Vercel e Railway.',
+        items: [
+          'Fazer commit e push no GitHub.',
+          'Confirmar deploy do frontend no Vercel.',
+          'Confirmar deploy do backend no Railway.',
+          'Conferir se VITE_API_BASE_URL aponta para Railway.',
+          'Conferir variáveis do Railway: Supabase, Gemini, Deepgram, R2 e Google Calendar.',
+          'Abrir logs do Railway e confirmar ausência de erro crítico.',
+          'Abrir logs/build do Vercel e confirmar ausência de erro de build.',
+          'Testar fluxo completo no domínio publicado.',
+        ],
+      },
+    ];
 
-      final.classList.toggle('show', percent === 100);
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        return { ...defaultState, ...saved };
+      } catch {
+        return { ...defaultState };
+      }
     }
 
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener('change', updateProgress);
-    });
+    function saveState() {
+      state.lastUpdatedAt = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
 
-    updateProgress();
+    function getTotals() {
+      const total = manualSuites.reduce((acc, suite) => acc + suite.items.length, 0);
+      const done = Object.values(state.checklist || {}).filter(Boolean).length;
+      const percent = total ? Math.round((done / total) * 100) : 0;
+      const remaining = Math.max(0, total - done);
+      return { total, done, percent, remaining };
+    }
+
+    function render() {
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="mx-auto max-w-[1500px] px-4 md:px-6 py-6 md:py-8">
+          ${renderHeader()}
+          ${renderOverview()}
+          ${renderMainChecklist()}
+          ${renderFooter()}
+        </div>
+      `;
+
+      bindEvents();
+    }
+
+    function renderHeader() {
+      return `
+        <header class="rounded-[2rem] border border-slate-200 glass shadow-xl shadow-slate-200/50 overflow-hidden">
+          <div class="p-6 md:p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div>
+              <div class="inline-flex items-center gap-2 rounded-full bg-indigo-50 text-indigo-700 px-3 py-1 text-xs font-bold uppercase tracking-wider border border-indigo-100">
+                Checklist interno
+              </div>
+              <h1 class="text-3xl md:text-5xl font-black tracking-tight text-slate-950 mt-4">
+                Teste completo do Flashcards IA
+              </h1>
+              <p class="text-slate-500 mt-3 max-w-3xl leading-relaxed">
+                Use este arquivo <span class="font-semibold text-slate-700">index.html</span> como roteiro visual para testar todas as áreas do site publicado, sem precisar configurar API ou executar testes automáticos.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 min-w-[280px]">
+              <button id="markAllBtn" class="rounded-2xl bg-slate-950 text-white px-5 py-4 text-sm font-bold hover:bg-slate-800 transition shadow-lg shadow-slate-900/10">
+                Marcar tudo
+              </button>
+              <button id="resetBtn" class="rounded-2xl bg-white border border-slate-200 text-slate-700 px-5 py-4 text-sm font-bold hover:bg-slate-50 transition">
+                Limpar painel
+              </button>
+              <button id="exportBtn" class="col-span-2 rounded-2xl bg-indigo-600 text-white px-5 py-4 text-sm font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/20">
+                Exportar relatório JSON
+              </button>
+            </div>
+          </div>
+        </header>
+      `;
+    }
+
+    function renderOverview() {
+      const totals = getTotals();
+      const updated = state.lastUpdatedAt
+        ? new Date(state.lastUpdatedAt).toLocaleString('pt-BR')
+        : 'Ainda não iniciado';
+
+      return `
+        <section class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+          ${metricCard('Concluído', `${totals.percent}%`, `${totals.done}/${totals.total} itens testados`, 'indigo')}
+          ${metricCard('Pendentes', totals.remaining, 'Itens ainda não marcados', 'amber')}
+          ${metricCard('Seções', manualSuites.length, 'Áreas do sistema', 'emerald')}
+          ${metricCard('Última alteração', updated, 'Salvo no navegador', 'slate')}
+        </section>
+      `;
+    }
+
+    function metricCard(label, value, sub, tone) {
+      const tones = {
+        emerald: 'bg-emerald-50 text-emerald-700 border-emerald-100',
+        amber: 'bg-amber-50 text-amber-700 border-amber-100',
+        indigo: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+        slate: 'bg-white text-slate-700 border-slate-200',
+      };
+
+      return `
+        <div class="rounded-3xl border ${tones[tone]} p-5 shadow-sm overflow-hidden">
+          <p class="text-[11px] font-black uppercase tracking-wider opacity-70">${label}</p>
+          <p class="text-2xl md:text-3xl font-black mt-2 break-words">${value}</p>
+          <p class="text-xs mt-1 opacity-75 leading-relaxed">${sub}</p>
+        </div>
+      `;
+    }
+
+    function renderMainChecklist() {
+      return `
+        <main class="mt-6 grid grid-cols-1 xl:grid-cols-[280px_1fr] gap-6 items-start">
+          ${renderSidebar()}
+          <section class="rounded-[2rem] border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h2 class="text-xl font-black text-slate-900">Checklist guiado</h2>
+                <p class="text-sm text-slate-500 mt-1">Marque cada item depois de testar no site real.</p>
+              </div>
+              <div class="relative w-full md:w-[320px]">
+                <input id="searchInput" type="text" placeholder="Buscar teste..." class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300" />
+              </div>
+            </div>
+            <div id="checklistContainer" class="p-5 space-y-4">
+              ${manualSuites.map(renderManualSuite).join('')}
+            </div>
+          </section>
+        </main>
+      `;
+    }
+
+    function renderSidebar() {
+      return `
+        <aside class="xl:sticky xl:top-6 rounded-[2rem] border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <div class="p-5 border-b border-slate-100">
+            <p class="text-xs font-black uppercase tracking-[0.18em] text-slate-400">Navegação</p>
+            <h2 class="text-lg font-black text-slate-900 mt-1">Áreas de teste</h2>
+          </div>
+          <nav class="p-3 max-h-[calc(100vh-180px)] overflow-y-auto custom-scroll">
+            ${manualSuites.map((suite) => {
+              const done = suite.items.filter((_, index) => state.checklist[`${suite.id}:${index}`]).length;
+              const complete = done === suite.items.length;
+              return `
+                <a href="#suite-${suite.id}" class="flex items-center justify-between gap-3 rounded-2xl px-3 py-3 hover:bg-slate-50 transition ${complete ? 'text-emerald-700' : 'text-slate-700'}">
+                  <span class="flex items-center gap-3 min-w-0">
+                    <span class="w-9 h-9 rounded-xl ${complete ? 'bg-emerald-50' : 'bg-indigo-50'} flex items-center justify-center shrink-0">${suite.icon}</span>
+                    <span class="text-sm font-bold truncate">${suite.title}</span>
+                  </span>
+                  <span class="text-[11px] font-black rounded-full ${complete ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'} px-2 py-1 shrink-0">${done}/${suite.items.length}</span>
+                </a>
+              `;
+            }).join('')}
+          </nav>
+        </aside>
+      `;
+    }
+
+    function renderManualSuite(suite) {
+      const done = suite.items.filter((_, index) => state.checklist[`${suite.id}:${index}`]).length;
+      const percent = suite.items.length ? Math.round((done / suite.items.length) * 100) : 0;
+      const complete = done === suite.items.length;
+
+      return `
+        <details id="suite-${suite.id}" class="suite-card group rounded-3xl border ${complete ? 'border-emerald-200 bg-emerald-50/30' : 'border-slate-200 bg-slate-50/60'} overflow-hidden scroll-mt-6" open data-suite-title="${escapeAttr(suite.title)}" data-suite-description="${escapeAttr(suite.description)}">
+          <summary class="list-none cursor-pointer p-5 flex items-center justify-between gap-4 bg-white hover:bg-slate-50">
+            <div class="flex items-center gap-4 min-w-0">
+              <div class="w-12 h-12 rounded-2xl ${complete ? 'bg-emerald-50 text-emerald-700' : 'bg-indigo-50 text-indigo-700'} flex items-center justify-center text-xl shrink-0">${suite.icon}</div>
+              <div class="min-w-0">
+                <h3 class="font-black text-slate-900 truncate">${suite.title}</h3>
+                <p class="text-sm text-slate-500 mt-1 leading-relaxed">${suite.description}</p>
+              </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-3 shrink-0">
+              <div class="w-32 h-2 rounded-full bg-slate-100 overflow-hidden">
+                <div class="h-full rounded-full ${complete ? 'bg-emerald-500' : 'bg-indigo-500'}" style="width:${percent}%"></div>
+              </div>
+              <span class="rounded-full ${complete ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'} px-3 py-1 text-xs font-black">${done}/${suite.items.length}</span>
+            </div>
+          </summary>
+
+          <div class="p-5 space-y-2">
+            ${suite.items.map((item, index) => renderChecklistItem(suite, item, index)).join('')}
+            <label class="block pt-3">
+              <span class="text-xs font-black uppercase tracking-wider text-slate-400">Observações desta seção</span>
+              <textarea data-note-key="${suite.id}" class="mt-2 w-full min-h-[90px] rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300" placeholder="Anote problemas encontrados, prints, links ou detalhes importantes...">${escapeText(state.notes[suite.id] || '')}</textarea>
+            </label>
+          </div>
+        </details>
+      `;
+    }
+
+    function renderChecklistItem(suite, item, index) {
+      const key = `${suite.id}:${index}`;
+      const checked = Boolean(state.checklist[key]);
+
+      return `
+        <label class="check-item flex items-start gap-3 rounded-2xl border ${checked ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200 bg-white'} p-4 cursor-pointer hover:border-indigo-200 transition" data-search-text="${escapeAttr(`${suite.title} ${suite.description} ${item}`)}">
+          <input type="checkbox" data-check-key="${key}" ${checked ? 'checked' : ''} class="mt-1 w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+          <span class="text-sm leading-relaxed ${checked ? 'text-emerald-900 font-semibold' : 'text-slate-700'}">${item}</span>
+        </label>
+      `;
+    }
+
+    function renderFooter() {
+      return `
+        <footer class="py-8 text-center text-xs text-slate-400">
+          Checklist salvo localmente no navegador. Use “Exportar relatório JSON” para guardar o resultado do teste.
+        </footer>
+      `;
+    }
+
+    function bindEvents() {
+      document.getElementById('markAllBtn')?.addEventListener('click', () => {
+        manualSuites.forEach((suite) => {
+          suite.items.forEach((_, index) => {
+            state.checklist[`${suite.id}:${index}`] = true;
+          });
+        });
+        saveState();
+        render();
+      });
+
+      document.getElementById('resetBtn')?.addEventListener('click', () => {
+        if (!confirm('Limpar checklist e observações deste painel?')) return;
+        state.checklist = {};
+        state.notes = {};
+        state.lastUpdatedAt = null;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        render();
+      });
+
+      document.getElementById('exportBtn')?.addEventListener('click', exportReport);
+
+      document.querySelectorAll('[data-check-key]').forEach((input) => {
+        input.addEventListener('change', (event) => {
+          state.checklist[event.target.dataset.checkKey] = event.target.checked;
+          saveState();
+          render();
+        });
+      });
+
+      document.querySelectorAll('[data-note-key]').forEach((textarea) => {
+        textarea.addEventListener('input', (event) => {
+          state.notes[event.target.dataset.noteKey] = event.target.value;
+          saveState();
+        });
+      });
+
+      document.getElementById('searchInput')?.addEventListener('input', (event) => {
+        applySearch(event.target.value);
+      });
+    }
+
+    function applySearch(term) {
+      const normalized = String(term || '').trim().toLowerCase();
+      const suites = document.querySelectorAll('.suite-card');
+
+      suites.forEach((suite) => {
+        let hasVisibleItem = false;
+        const suiteText = `${suite.dataset.suiteTitle || ''} ${suite.dataset.suiteDescription || ''}`.toLowerCase();
+        const suiteMatches = suiteText.includes(normalized);
+
+        suite.querySelectorAll('.check-item').forEach((item) => {
+          const itemText = String(item.dataset.searchText || '').toLowerCase();
+          const visible = !normalized || suiteMatches || itemText.includes(normalized);
+          item.classList.toggle('hidden', !visible);
+          if (visible) hasVisibleItem = true;
+        });
+
+        suite.classList.toggle('hidden', normalized && !hasVisibleItem && !suiteMatches);
+      });
+    }
+
+    function exportReport() {
+      const totals = getTotals();
+      const sections = manualSuites.map((suite) => {
+        const items = suite.items.map((item, index) => ({
+          text: item,
+          done: Boolean(state.checklist[`${suite.id}:${index}`]),
+        }));
+
+        return {
+          id: suite.id,
+          title: suite.title,
+          description: suite.description,
+          total: items.length,
+          done: items.filter((item) => item.done).length,
+          note: state.notes[suite.id] || '',
+          items,
+        };
+      });
+
+      const payload = {
+        generatedAt: new Date().toISOString(),
+        totals,
+        sections,
+      };
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `flashcards-checklist-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function escapeAttr(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function escapeText(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    render();
   </script>
 </body>
 </html>
